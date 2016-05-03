@@ -1,13 +1,16 @@
 import random
 import re
+import requests
 
 #Global variables: wordList, wrongGuessCounter, usedLetters, secretWord
-wordList = ['cat', 'sun', 'cup', 'ghost', 'flower', 'pie', 'cow', 'banana', 
-'snowflake', 'bug', 'book', 'jar', 'snake', 'light', 'tree', 'lips', 'apple']
+apiWord = requests.get("http://randomword.setgetgo.com/get.php?len=7")
 
 wrongGuessCounter = 0
-secretWord = random.choice(wordList)
+secretWord = apiWord.text
 usedLetters = []
+
+apiWord = requests.get("http://randomword.setgetgo.com/get.php")
+print(apiWord)
 
 #Display Board function:
 def displayBoard(word):
