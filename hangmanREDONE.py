@@ -78,7 +78,7 @@ def playAgain():
     if startOver == True:
         wrongGuessCounter = 0
         usedLetters = []
-        secretWord = random.choice(wordList)
+        secretWord = apiWord.text
     else: 
         print("Have a nice day!")
         exit()
