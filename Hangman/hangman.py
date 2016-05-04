@@ -91,7 +91,6 @@ times the game is over.")
     
     #Calls all functions while players hasn't reached max number of wrong guesses
     while wrongGuessCounter < 5:
-        print(secretWord)
         displayBoard(secretWord, usedLetters, wrongGuessCounter)
         guess = checkInput(usedLetters)
         wrongGuessCounter = isInWord(guess, secretWord, wrongGuessCounter)
