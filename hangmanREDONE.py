@@ -80,8 +80,7 @@ def playAgain():
     global wrongGuessCounter
     global usedLetters
     global secretWord
-    global activeGame
-    
+
     startOver = False
     
     startOver = input("Would you like to play again?").lower() in ["yes", "y"]
@@ -89,26 +88,31 @@ def playAgain():
         wrongGuessCounter = 0
         usedLetters = []
         secretWord = apiWord()
+        main()
     else: 
         print("Have a nice day!")
         exit()
     
 #main body:  Non-function.  Nest within while loop - calls all of the above functions as necessary
-print("Welcome to Hangman! Try to guess the Secret Word. If you guess wrong five \
+
+def main():
+    print("Welcome to Hangman! Try to guess the Secret Word. If you guess wrong five \
 times the game is over.")
 
-   
-#while activeGame == True:
-while activeGame == True and wrongGuessCounter < 5:
-    print(secretWord)
-    displayBoard(secretWord)
-    guess = checkInput()
-    isInWord(guess)
-    win()
+
+    #while activeGame == True:
+    while wrongGuessCounter < 5:
+        print(secretWord)
+        displayBoard(secretWord)
+        guess = checkInput()
+        isInWord(guess)
+        win()
         
-#Check if player has lost by running out of turns (non-function)
-#If they lost, display lose message and call playAgain
-else:
-    print(HANGMANPICS[wrongGuessCounter])
-    print("You are out of guesses.  The word was {}.".format(secretWord.upper()))
-    playAgain()
+    #Check if player has lost by running out of turns (non-function)
+    #If they lost, display lose message and call playAgain
+    else:
+        print(HANGMANPICS[wrongGuessCounter])
+        print("You are out of guesses.  The word was {}.".format(secretWord.upper()))
+        playAgain()
+        
+main()
