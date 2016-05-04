@@ -79,7 +79,7 @@ def playAgain():
         print("Have a nice day!")
         exit()
     
-#main body:  Non-function.  Nest within while loop - calls all of the above functions as necessary
+#main function.  All other functions called from here.
 
 def main():
     print("Welcome to Hangman! Try to guess the Secret Word. If you guess wrong five \
