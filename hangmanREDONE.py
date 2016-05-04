@@ -3,21 +3,13 @@ import re
 import requests
 from hangmanPics import HANGMANPICS
 
-#Global variables: wordList, wrongGuessCounter, usedLetters, secretWord
-
-wrongGuessCounter = 0
-usedLetters = []
-activeGame = True 
-
 #Get request to random word API
 def apiWord():
     word = requests.get("http://randomword.setgetgo.com/get.php?len=7")
     return word.text.lower()
 
-secretWord = apiWord()
-
 #Display Board function: Will take: secretWord.  Will return: Nothing
-def displayBoard(word):
+def displayBoard(word, usedLetters, wrongGuessCounter):
     #Will one day display ASCII
     print(HANGMANPICS[wrongGuessCounter])
     #Displays 'hashed' secretWord
@@ -36,7 +28,7 @@ def displayBoard(word):
     
 
 #checkInput function:  Make sure input is single letter.  Append correct input to usedLetters
-def checkInput():
+def checkInput(usedLetters):
     while True:
         print("")
         playerGuess = input("Guess a letter.").lower()
@@ -55,17 +47,18 @@ def checkInput():
 
 #isInWord function: Checks if user input is in the secretWord (after checkInput)
 #Will take: guess.  Will return: nothing  If guess is not in secret word, increase wrongGuessCounter by 1
-def isInWord(guess):
-    global wrongGuessCounter
+def isInWord(guess, secretWord, wrongGuessCounter):
     if guess in secretWord:
         print("YES!  The letter '{}' is in the Secret Word!\n".format(guess.upper()))
     else: 
         print("The letter '{}' is not in the Secret Word.\n".format(guess.upper()))
         wrongGuessCounter += 1
+    return wrongGuessCounter
+        
 
 #Check if player has won with last input (function)
 #If they win, display win message and call playAgain. If not, continue
-def win():
+def win(secretWord, usedLetters):
     foundAllLetters = True
     for letters in secretWord:
         if letters not in usedLetters:
@@ -77,17 +70,10 @@ def win():
 
 #playAgain function:  Asks the user if they want to play agian.  Starts over if they do.  Exits if not
 def playAgain():
-    global wrongGuessCounter
-    global usedLetters
-    global secretWord
-
     startOver = False
     
     startOver = input("Would you like to play again?").lower() in ["yes", "y"]
     if startOver == True:
-        wrongGuessCounter = 0
-        usedLetters = []
-        secretWord = apiWord()
         main()
     else: 
         print("Have a nice day!")
@@ -99,14 +85,17 @@ def main():
     print("Welcome to Hangman! Try to guess the Secret Word. If you guess wrong five \
 times the game is over.")
 
-
-    #while activeGame == True:
+    wrongGuessCounter = 0
+    usedLetters = []
+    secretWord = apiWord()
+    
+    #Calls all functions while players hasn't reached max number of wrong guesses
     while wrongGuessCounter < 5:
         print(secretWord)
-        displayBoard(secretWord)
-        guess = checkInput()
-        isInWord(guess)
-        win()
+        displayBoard(secretWord, usedLetters, wrongGuessCounter)
+        guess = checkInput(usedLetters)
+        wrongGuessCounter = isInWord(guess, secretWord, wrongGuessCounter)
+        win(secretWord, usedLetters)
         
     #Check if player has lost by running out of turns (non-function)
     #If they lost, display lose message and call playAgain
@@ -115,4 +104,5 @@ times the game is over.")
         print("You are out of guesses.  The word was {}.".format(secretWord.upper()))
         playAgain()
         
-main()
+if __name__ == "__main__":
+    main()
